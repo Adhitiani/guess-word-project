@@ -10,14 +10,12 @@ const playAgainButton = document.querySelector(".play-again");
 const word = "magnolia";
 const guessedLetters = [];
 
-// Display our symbols as placeholders for the chosen word's letters
 
-function addPlaceholderLetter(word) {
-  wordProgess.innerText = '● '.repeat(word.length);
-}
+ function placeHolder(word) {
+  wordProgess.innerHTML = '● '.repeat(word.length);
+ }
 
-addPlaceholderLetter(word);
-
+placeHolder(word);
 
 guessButton.addEventListener("click", function (e) {
   e.preventDefault();
@@ -26,9 +24,8 @@ guessButton.addEventListener("click", function (e) {
   let inputLetter = guessInput.value;
   let goodGuess = validateInput(inputLetter);
 
-
   if (goodGuess) {
-    makeGuess(inputLetter)
+    makeGuess(inputLetter);
   }
   inputLetter.value = "";
 });
@@ -54,9 +51,43 @@ function makeGuess(letter) {
     message.innerText = "You have entered the same letter";
   } else {
     guessedLetters.push(letter);
-    console.log(guessedLetters);
+    showGuessedLetters();
+    updateWordInProgress(guessedLetters);
   }
+};
+
+function showGuessedLetters() {
+  guessLetter.innerHTML = "";
+  for (let letter of guessedLetters) {
+    let li = document.createElement("li");
+    li.innerHTML = letter;
+    guessLetter.append(li)
+  }
+};
+
+function updateWordInProgress(guessedLetters) {
+  let wordUpper = word.toUpperCase();
+  let wordArray = wordUpper.split("");
+  let correctGuess = [];
+ 
+  for (let letter of wordArray) {
+    if (guessedLetters.includes(letter)) {
+      correctGuess.push(letter)
+    } else {
+      correctGuess.push('●')
+    }
+  }
+  wordProgess.innerText = correctGuess.join("");
+  isWin()
+
 }
+
+function isWin() {
+  if(word.toUpperCase() === wordProgess.innerHTML) {
+    message.classList.add("win");
+    message.innerHTML = `<p class="highlight">You guessed correct the word! Congrats!</p>`
+  }
+};
 
 
 
