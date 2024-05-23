@@ -25,10 +25,10 @@ guessButton.addEventListener("click", function (e) {
 
   let inputLetter = guessInput.value;
   let goodGuess = validateInput(inputLetter);
-  message.innerText = input;
+
 
   if (goodGuess) {
-    makeGuess(input)
+    makeGuess(inputLetter)
   }
   inputLetter.value = "";
 });
@@ -53,11 +53,11 @@ function makeGuess(letter) {
   if (guessedLetters.includes(letter)) {
     message.innerText = "You have entered the same letter";
   } else {
-    guessedLetters.push(upperLetter);
+    guessedLetters.push(letter);
     console.log(guessedLetters);
   }
 }
-ß
+
 
 
 
