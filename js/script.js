@@ -7,15 +7,26 @@ const remainingGuessSpan = document.querySelector(".remaining span");
 const message = document.querySelector(".message");
 const playAgainButton = document.querySelector(".play-again");
 
-const word = "magnolia";
+let word = "magnolia";
 const guessedLetters = [];
+let remainingGuesses = 8;
+
+let getWord = async function() {
+  let getData = await fetch("https://gist.githubusercontent.com/skillcrush-curriculum/7061f1d4d3d5bfe47efbfbcfe42bf57e/raw/5ffc447694486e7dea686f34a6c085ae371b43fe/words.txt");
+  let words = await getData.text();
+  let wordArray = words.split("\n");
+  let randomIndex = Math.floor(Math.random() * wordArray.length);
+  word = wordArray[randomIndex];
+  placeHolder(word);
+}
+
 
 
  function placeHolder(word) {
   wordProgess.innerHTML = '● '.repeat(word.length);
  }
 
-placeHolder(word);
+ getWord();
 
 guessButton.addEventListener("click", function (e) {
   e.preventDefault();
@@ -51,6 +62,7 @@ function makeGuess(letter) {
     message.innerText = "You have entered the same letter";
   } else {
     guessedLetters.push(letter);
+    countGuess(letter);
     showGuessedLetters();
     updateWordInProgress(guessedLetters);
   }
@@ -78,7 +90,7 @@ function updateWordInProgress(guessedLetters) {
     }
   }
   wordProgess.innerText = correctGuess.join("");
-  isWin()
+  isWin();
 
 }
 
@@ -88,6 +100,27 @@ function isWin() {
     message.innerHTML = `<p class="highlight">You guessed correct the word! Congrats!</p>`
   }
 };
+
+function countGuess(guess) {
+  let upperWord = word.toUpperCase();
+  if (!upperWord.includes(guess)) {
+      message.innerText = `Sorry, the word has no ${guess}.`;
+      remainingGuesses -= 1;
+  } else {
+    message.innerText = `Good guess! The word has the letter ${guess}.`;
+  }
+
+  if (remainingGuesses === 0) {
+    message.innerHTML = `Game over! The word was <span class="highlight">${word}</span>.`;
+    remainingGuessSpan.innerText = `${remainingGuesses} guess`;
+  } else if (remainingGuesses === 1) {
+     remainingGuessSpan.innerText = `${remainingGuesses} guess`;
+  } else {
+    remainingGuessSpan.innerText = `${remainingGuesses} guesses`;
+  }
+
+ 
+}
 
 
 
