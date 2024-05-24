@@ -16,18 +16,19 @@ let getWord = async function() {
   let words = await getData.text();
   let wordArray = words.split("\n");
   let randomIndex = Math.floor(Math.random() * wordArray.length);
-  word = wordArray[randomIndex];
+  word = wordArray[randomIndex].trim();
   placeHolder(word);
 }
-
 
 
  function placeHolder(word) {
   wordProgess.innerHTML = '● '.repeat(word.length);
  }
 
+
  getWord();
 
+ 
 guessButton.addEventListener("click", function (e) {
   e.preventDefault();
   message.innerText = "";
@@ -38,7 +39,7 @@ guessButton.addEventListener("click", function (e) {
   if (goodGuess) {
     makeGuess(inputLetter);
   }
-  inputLetter.value = "";
+    guessInput.value = "";
 });
 
 
